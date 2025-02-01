@@ -61,7 +61,8 @@ class ScalarFunction:
 
         # Call forward with the variables.
         c = cls._forward(ctx, *raw_vals)
-        assert isinstance(c, float), "Expected return type float got %s" % (type(c))
+        # assert isinstance(c, float), "Expected return type float got %s" % (type(c))
+        assert isinstance(c, float), f"Expected {cls.__name__} to return a float, got {type(c)} with value {c}"
 
         # Create a new variable from the result with a new history.
         back = minitorch.scalar.ScalarHistory(cls, ctx, scalars)
