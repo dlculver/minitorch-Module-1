@@ -158,13 +158,16 @@ class Scalar:
         return self.history.inputs
 
     def chain_rule(self, d_output: Any) -> Iterable[Tuple[Variable, Any]]:
+        """Responsible for taking the incoming gradient and propogate to the parent variables."""
         h = self.history
         assert h is not None
         assert h.last_fn is not None
         assert h.ctx is not None
 
-        # TODO: Implement for Task 1.3.
-        raise NotImplementedError("Need to implement for Task 1.3")
+        grads = h.last_fn.backward(h.ctx, d_output)
+
+        for parent, grad in zip(h.inputs, grads):
+            yield parent, grad
 
     def backward(self, d_output: Optional[float] = None) -> None:
         """

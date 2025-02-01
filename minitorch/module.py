@@ -30,22 +30,23 @@ class Module:
 
     def train(self) -> None:
         "Set the mode of this module and all descendent modules to `train`."
+
         def _train(module):
             module.training = True
             for m in module.modules():
                 _train(m)
-        
+
         _train(self)
 
     def eval(self) -> None:
         "Set the mode of this module and all descendent modules to `eval`."
+
         def _eval(module):
             module.training = False
             for m in module.modules():
                 _eval(m)
-            
-        _eval(self)
 
+        _eval(self)
 
     def named_parameters(self):
         """
@@ -63,7 +64,7 @@ class Module:
                 yield from _named_parameters(module, prefix + name + ".")
 
         return list(_named_parameters(self))
-    
+
     def parameters(self) -> Sequence[Parameter]:
         "Enumerate over all the parameters of this module and its descendents."
         return [param for param in self.named_parameters()]

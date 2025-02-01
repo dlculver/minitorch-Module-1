@@ -110,25 +110,32 @@ def test_sigmoid(a: float) -> None:
     # TODO: Implement for Task 0.2.
 
     # 1. Check value is always between 0.0 and 1.0
-    result =  sigmoid(a)
-    assert 0.0 <= result <= 1.0, "Sigmoid implementation leads values out of bounds: {result}"
+    result = sigmoid(a)
+    assert 0.0 <= result <= 1.0, (
+        "Sigmoid implementation leads values out of bounds: {result}"
+    )
 
     # 2. identity 1 - sigmoid(a) = sigmoid(-a)
     neg_result = sigmoid(-a)
-    assert_close(1 - result, neg_result), (
-        f"1 - sigmoid({a}) != sigmoid(-{a}): {1 - result} != {neg_result}"
+    (
+        assert_close(1 - result, neg_result),
+        (f"1 - sigmoid({a}) != sigmoid(-{a}): {1 - result} != {neg_result}"),
     )
 
     # 3. Crosses 0 at 0.5
-    assert_close(sigmoid(0), 0.5), f"Sigmoid doesn't cross y-axis at 0.5, instead is {sigmoid(0)}"
+    (
+        assert_close(sigmoid(0), 0.5),
+        f"Sigmoid doesn't cross y-axis at 0.5, instead is {sigmoid(0)}",
+    )
 
     # 4. It is strictly increasing
     x = -10
     eps = 1
     while x < 10:
-        assert sigmoid(x + eps) > sigmoid(x), f"Sigmoid isn't monotonic: {sigmoid(x + eps)} <= {sigmoid(x)}"
+        assert sigmoid(x + eps) > sigmoid(x), (
+            f"Sigmoid isn't monotonic: {sigmoid(x + eps)} <= {sigmoid(x)}"
+        )
         x += eps
-
 
 
 @pytest.mark.task0_2
@@ -144,7 +151,7 @@ def test_transitive(a: float, b: float, c: float) -> None:
 
 @pytest.mark.task0_2
 @given(small_floats, small_floats)
-def test_symmetric(a: float, b:float) -> None:
+def test_symmetric(a: float, b: float) -> None:
     """
     Write a test that ensures that :func:`minitorch.operators.mul` is symmetric, i.e.
     gives the same value regardless of the order of its input.
@@ -161,8 +168,12 @@ def test_distribute(a: float, b: float, c: float) -> None:
     :math:`z \times (x + y) = z \times x + z \times y`
     """
     # TODO: Implement for Task 0.2.
-    assert_close(mul(a, add(b, c)), add(mul(a, b), mul(a, c))), "add and mul don't distribute"
-    
+    (
+        assert_close(mul(a, add(b, c)), add(mul(a, b), mul(a, c))),
+        "add and mul don't distribute",
+    )
+
+
 @pytest.mark.task0_2
 @given(small_floats)
 def test_other(a: float) -> None:
@@ -171,7 +182,7 @@ def test_other(a: float) -> None:
     """
     if a != 0:
         assert inv(a) != 0
-    
+
 
 # ## Task 0.3  - Higher-order functions
 

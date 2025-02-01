@@ -12,12 +12,13 @@ from typing import Callable, Iterable, List
 
 def mul(x: float, y: float) -> float:
     "$f(x, y) = x * y$"
-    return x * y 
+    return x * y
 
 
 def id(x: float) -> float:
     "$f(x) = x$"
     return x
+
 
 def add(x: float, y: float) -> float:
     "$f(x, y) = x + y$"
@@ -27,6 +28,7 @@ def add(x: float, y: float) -> float:
 def neg(x: float) -> float:
     "$f(x) = -x$"
     return -float(x)
+
 
 def lt(x: float, y: float) -> float:
     "$f(x) =$ 1.0 if x is less than y else 0.0"
@@ -45,7 +47,7 @@ def max(x: float, y: float) -> float:
 
 def is_close(x: float, y: float) -> float:
     "$f(x) = |x - y| < 1e-2$"
-    return 1.0 if abs(x-y) < 1e-2 else 0.0
+    return 1.0 if abs(x - y) < 1e-2 else 0.0
 
 
 def sigmoid(x: float) -> float:
@@ -60,7 +62,7 @@ def sigmoid(x: float) -> float:
 
     for stability.
     """
-    return 1/(1+math.exp(-x)) if x >= 0 else math.exp(x)/(1+math.exp(x))
+    return 1 / (1 + math.exp(-x)) if x >= 0 else math.exp(x) / (1 + math.exp(x))
 
 
 def relu(x: float) -> float:
@@ -93,7 +95,7 @@ def log_back(x: float, d: float) -> float:
 def inv(x: float) -> float:
     "$f(x) = 1/x$"
     if x != 0:
-        return 1/x
+        return 1 / x
     else:
         raise ZeroDivisionError
 
@@ -129,9 +131,10 @@ def map(fn: Callable[[float], float]) -> Callable[[Iterable[float]], Iterable[fl
         A function that takes a list, applies `fn` to each element, and returns a
          new list
     """
+
     def higher_order_fn(arr: List[float]) -> List[float]:
         return [fn(x) for x in arr]
-    
+
     return higher_order_fn
 
 
@@ -141,7 +144,7 @@ def negList(ls: Iterable[float]) -> Iterable[float]:
 
 
 def zipWith(
-    fn: Callable[[float, float], float]
+    fn: Callable[[float, float], float],
 ) -> Callable[[Iterable[float], Iterable[float]], Iterable[float]]:
     """
     Higher-order zipwith (or map2).
@@ -156,11 +159,13 @@ def zipWith(
          applying fn(x, y) on each pair of elements.
 
     """
+
     # TODO: Implement for Task 0.3.
     # Is there a clever way with map and built in zip we can do?
     def zip_with_fn(ls1: List[float], ls2: List[float]) -> List[float]:
         assert len(ls1) == len(ls2), "Lists must have same length."
         return [fn(x, y) for x, y in zip(ls1, ls2)]
+
     return zip_with_fn
 
 
@@ -185,12 +190,14 @@ def reduce(
          $x_1 \ldots x_n$ and computes the reduction :math:`fn(x_3, fn(x_2,
          fn(x_1, x_0)))`
     """
+
     # TODO: Implement for Task 0.3.
     def reduce_fn(ls: Iterable[float]) -> float:
         result = start
         for item in ls:
             result = fn(item, result)
         return result
+
     return reduce_fn
 
 
@@ -198,7 +205,6 @@ def sum(ls: Iterable[float]) -> float:
     "Sum up a list using `reduce` and `add`."
     # TODO: Implement for Task 0.3.
     return reduce(add, 0.0)(ls)
-    
 
 
 def prod(ls: Iterable[float]) -> float:
