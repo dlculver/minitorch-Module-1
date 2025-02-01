@@ -26,30 +26,47 @@ class Module:
 
     def modules(self) -> Sequence[Module]:
         "Return the direct child modules of this module."
-        m: Dict[str, Module] = self.__dict__["_modules"]
-        return list(m.values())
+        return self.__dict__["_modules"].values()
 
     def train(self) -> None:
         "Set the mode of this module and all descendent modules to `train`."
-        raise NotImplementedError("Need to include this file from past assignment.")
+        def _train(module):
+            module.training = True
+            for m in module.modules():
+                _train(m)
+        
+        _train(self)
 
     def eval(self) -> None:
         "Set the mode of this module and all descendent modules to `eval`."
-        raise NotImplementedError("Need to include this file from past assignment.")
+        def _eval(module):
+            module.training = False
+            for m in module.modules():
+                _eval(m)
+            
+        _eval(self)
 
-    def named_parameters(self) -> Sequence[Tuple[str, Parameter]]:
+
+    def named_parameters(self):
         """
         Collect all the parameters of this module and its descendents.
 
 
         Returns:
-            The name and `Parameter` of each ancestor parameter.
+            list of pairs: Contains the name and :class:`Parameter` of each ancestor parameter.
         """
-        raise NotImplementedError("Need to include this file from past assignment.")
 
+        def _named_parameters(module, prefix=""):
+            for name, param in module._parameters.items():
+                yield prefix + name, param
+            for name, module in module._modules.items():
+                yield from _named_parameters(module, prefix + name + ".")
+
+        return list(_named_parameters(self))
+    
     def parameters(self) -> Sequence[Parameter]:
         "Enumerate over all the parameters of this module and its descendents."
-        raise NotImplementedError("Need to include this file from past assignment.")
+        return [param for param in self.named_parameters()]
 
     def add_parameter(self, k: str, v: Any) -> Parameter:
         """
@@ -115,9 +132,9 @@ class Module:
 
 class Parameter:
     """
-    A Parameter is a special container stored in a `Module`.
+    A Parameter is a special container stored in a :class:`Module`.
 
-    It is designed to hold a `Variable`, but we allow it to hold
+    It is designed to hold a :class:`Variable`, but we allow it to hold
     any value for testing.
     """
 

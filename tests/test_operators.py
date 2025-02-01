@@ -107,41 +107,71 @@ def test_sigmoid(a: float) -> None:
     * It crosses 0 at 0.5
     * It is  strictly increasing.
     """
-    raise NotImplementedError("Need to include this file from past assignment.")
+    # TODO: Implement for Task 0.2.
+
+    # 1. Check value is always between 0.0 and 1.0
+    result =  sigmoid(a)
+    assert 0.0 <= result <= 1.0, "Sigmoid implementation leads values out of bounds: {result}"
+
+    # 2. identity 1 - sigmoid(a) = sigmoid(-a)
+    neg_result = sigmoid(-a)
+    assert_close(1 - result, neg_result), (
+        f"1 - sigmoid({a}) != sigmoid(-{a}): {1 - result} != {neg_result}"
+    )
+
+    # 3. Crosses 0 at 0.5
+    assert_close(sigmoid(0), 0.5), f"Sigmoid doesn't cross y-axis at 0.5, instead is {sigmoid(0)}"
+
+    # 4. It is strictly increasing
+    x = -10
+    eps = 1
+    while x < 10:
+        assert sigmoid(x + eps) > sigmoid(x), f"Sigmoid isn't monotonic: {sigmoid(x + eps)} <= {sigmoid(x)}"
+        x += eps
+
 
 
 @pytest.mark.task0_2
 @given(small_floats, small_floats, small_floats)
 def test_transitive(a: float, b: float, c: float) -> None:
     "Test the transitive property of less-than (a < b and b < c implies a < c)"
-    raise NotImplementedError("Need to include this file from past assignment.")
+    # TODO: Implement for Task 0.2.
+
+    a_sorted, b_sorted, c_sorted = sorted([a, b, c])
+    if lt(a_sorted, b_sorted) and lt(b_sorted, c_sorted):
+        assert lt(a_sorted, c_sorted), f"lt is not transitive: {a_sorted} >= {c_sorted}"
 
 
 @pytest.mark.task0_2
-def test_symmetric() -> None:
+@given(small_floats, small_floats)
+def test_symmetric(a: float, b:float) -> None:
     """
     Write a test that ensures that :func:`minitorch.operators.mul` is symmetric, i.e.
     gives the same value regardless of the order of its input.
     """
-    raise NotImplementedError("Need to include this file from past assignment.")
+    # TODO: Implement for Task 0.2.
+    assert mul(a, b) == mul(b, a), "mul is not commutative"
 
 
 @pytest.mark.task0_2
-def test_distribute() -> None:
+@given(small_floats, small_floats, small_floats)
+def test_distribute(a: float, b: float, c: float) -> None:
     r"""
     Write a test that ensures that your operators distribute, i.e.
     :math:`z \times (x + y) = z \times x + z \times y`
     """
-    raise NotImplementedError("Need to include this file from past assignment.")
-
-
+    # TODO: Implement for Task 0.2.
+    assert_close(mul(a, add(b, c)), add(mul(a, b), mul(a, c))), "add and mul don't distribute"
+    
 @pytest.mark.task0_2
-def test_other() -> None:
+@given(small_floats)
+def test_other(a: float) -> None:
     """
     Write a test that ensures some other property holds for your functions.
     """
-    raise NotImplementedError("Need to include this file from past assignment.")
-
+    if a != 0:
+        assert inv(a) != 0
+    
 
 # ## Task 0.3  - Higher-order functions
 
@@ -168,7 +198,10 @@ def test_sum_distribute(ls1: List[float], ls2: List[float]) -> None:
     Write a test that ensures that the sum of `ls1` plus the sum of `ls2`
     is the same as the sum of each element of `ls1` plus each element of `ls2`.
     """
-    raise NotImplementedError("Need to include this file from past assignment.")
+    way_one = sum(addLists(ls1, ls2))
+    way_two = add(sum(ls1), sum(ls2))
+
+    assert_close(way_one, way_two), "list summing isn't distributive"
 
 
 @pytest.mark.task0_3
